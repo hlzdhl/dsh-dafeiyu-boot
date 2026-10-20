@@ -1,6 +1,6 @@
 ﻿#Requires -Version 5.1
 <#
-  dsh-boot-suite —— 急救：把插件从 desktop profile 里彻底卸掉
+  dsh-dafeiyu-boot —— 急救：把插件从 desktop profile 里彻底卸掉
 
   什么时候用：开机黑屏、动画卡死、界面点不动，你想先让客户端恢复正常。
   用法：
@@ -58,15 +58,15 @@ New-Item -ItemType Directory -Force -Path $bk | Out-Null
 Copy-Item $pj (Join-Path $bk 'package.json') -Force
 Say ('[1/3] 已备份 profile 配置 → ' + $bk)
 
-Say '[2/3] 卸载 dsh-boot-suite …'
-& $pm.node $pm.pnpm remove --dir $ProfileDir dsh-boot-suite 2>&1 | ForEach-Object { '    ' + $_ }
+Say '[2/3] 卸载 dsh-dafeiyu-boot …'
+& $pm.node $pm.pnpm remove --dir $ProfileDir dsh-dafeiyu-boot 2>&1 | ForEach-Object { '    ' + $_ }
 
 Say '[3/3] 清理 bundles 列表与残留链接 …'
 $pkg = [System.IO.File]::ReadAllText($pj) | ConvertFrom-Json
 if ($pkg.dsh -and $pkg.dsh.profile) {
   $keep = @()
   foreach ($b in @($pkg.dsh.profile.bundles)) {
-    if ($b -in @('dsh-boot-suite', 'dsh-startup-screen', 'dsh-chat-wallpaper')) { continue }
+    if ($b -in @('dsh-dafeiyu-boot', 'dsh-startup-screen', 'dsh-chat-wallpaper')) { continue }
     $keep += $b
   }
   $pkg.dsh.profile.bundles = $keep
@@ -74,11 +74,11 @@ if ($pkg.dsh -and $pkg.dsh.profile) {
   Say ('    bundles = ' + ($keep -join ', '))
 }
 
-$inst = Join-Path $ProfileDir 'node_modules\dsh-boot-suite'
+$inst = Join-Path $ProfileDir 'node_modules\dsh-dafeiyu-boot'
 if (Test-Path $inst) {
   $item = Get-Item $inst -Force
   if ($item.LinkType) { cmd /c rmdir "$inst" | Out-Null } else { Remove-Item $inst -Recurse -Force -ErrorAction SilentlyContinue }
-  Say '    已清掉 node_modules\dsh-boot-suite'
+  Say '    已清掉 node_modules\dsh-dafeiyu-boot'
 }
 
 Say ''

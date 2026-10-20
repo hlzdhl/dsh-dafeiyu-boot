@@ -59,7 +59,7 @@ the newest file by mtime wins.
 
 ## Uninstall
 
-    dsh plugin --profile desktop remove dsh-boot-suite
+    dsh plugin --profile desktop remove dsh-dafeiyu-boot
 
 Config files are not deleted automatically.
 

@@ -14,7 +14,7 @@ const check = (label, ok, extra) => {
 
 console.log('\n[1] 包身份')
 const pkg = JSON.parse(read('package.json'))
-check('包名 = dsh-boot-suite', pkg.name === 'dsh-boot-suite', pkg.name)
+check('包名 = dsh-dafeiyu-boot', pkg.name === 'dsh-dafeiyu-boot', pkg.name)
 check('版本号是合法 semver', /^\d+\.\d+\.\d+$/.test(pkg.version), pkg.version)
 check('有 dsh.bundle.patch', pkg.dsh?.bundle?.patch === './cordis.patch.yml')
 check('dsh.client 注入了设置页服务', (pkg.dsh?.client?.inject || []).includes('@deepseek-ai/dsh-client-ui-settings'))
@@ -23,14 +23,14 @@ console.log('\n[2] 只有一条 bundle 行')
 const patch = read('cordis.patch.yml')
 const rows = patch.split('\n').filter((l) => /^\s+- id:/.test(l))
 check('cordis.patch.yml 只有 1 条 insert 行', rows.length === 1, rows.join(' | '))
-check('行 id = dsh-boot-suite', /- id:\s*dsh-boot-suite\s*$/.test(patch.trim().split('\n').pop() || '') || patch.includes('- id: dsh-boot-suite'))
-check('行 name = dsh-boot-suite', patch.includes('name: dsh-boot-suite'))
+check('行 id = dsh-dafeiyu-boot', /- id:\s*dsh-dafeiyu-boot\s*$/.test(patch.trim().split('\n').pop() || '') || patch.includes('- id: dsh-dafeiyu-boot'))
+check('行 name = dsh-dafeiyu-boot', patch.includes('name: dsh-dafeiyu-boot'))
 
 console.log('\n[3] 浏览器半：只注册一次模块')
 const client = read('lib/client.js')
 const loads = client.match(/__ModuleLoader__\.load\(/g) || []
 check('ModuleLoader.load 只调用 1 次', loads.length === 1, String(loads.length))
-check('注册 id = dsh-boot-suite', client.includes("id: 'dsh-boot-suite'"))
+check('注册 id = dsh-dafeiyu-boot', client.includes("id: 'dsh-dafeiyu-boot'"))
 check('地址栏常量没有被误改（/dsh-startup 与 /chat-wallpaper 都还在）',
   client.includes("var API = '/dsh-startup/config'") && client.includes("var API = '/chat-wallpaper'"))
 check('开机动画半侧的设置页契约还在（exports.apply / inject slots）',

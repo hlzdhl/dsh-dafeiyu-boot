@@ -123,7 +123,7 @@ function check(label, ok, extra) {
 console.log('\n[1] 模块导出形状（对齐 cordis-plugin-loader 的 unwrapExports）')
 const mod = await import(pathToFileURL(path.join(PLUGIN_ROOT, 'lib', 'index.js')).href)
 check('有具名 name', typeof mod.name === 'string', mod.name)
-check('name 与 cordis.patch.yml 的 id 一致', mod.name === 'dsh-boot-suite', mod.name)
+check('name 与 cordis.patch.yml 的 id 一致', mod.name === 'dsh-dafeiyu-boot', mod.name)
 check('有具名 inject', Array.isArray(mod.inject), JSON.stringify(mod.inject))
 check('inject 含 webServer + connection', mod.inject.includes('webServer') && mod.inject.includes('connection'))
 check('有具名 apply', typeof mod.apply === 'function')

@@ -1,6 +1,6 @@
 ﻿#Requires -Version 5.1
 <#
-  dsh-boot-suite —— 一键安装
+  dsh-dafeiyu-boot —— 一键安装
 
   用法：双击仓库根目录的「安装.cmd」，或者：
         powershell -NoProfile -ExecutionPolicy Bypass -File tools\install.ps1
@@ -29,7 +29,7 @@ if (-not (Test-Path (Join-Path $RepoRoot 'lib\index.js'))) { Die '源码不完�
 # 注意：Windows PowerShell 5.1 的 Get-Content 会按 ANSI 解码 UTF-8 文件，中文会糊成乱码、JSON 直接解析失败。
 # 统一用 [System.IO.File]::ReadAllText —— 它按 UTF-8 读。
 $pkgSelf = [System.IO.File]::ReadAllText((Join-Path $RepoRoot 'package.json')) | ConvertFrom-Json
-Say ('dsh-boot-suite v' + $pkgSelf.version)
+Say ('dsh-dafeiyu-boot v' + $pkgSelf.version)
 Say ('仓库位置：' + $RepoRoot)
 
 if ($CheckOnly) { Say '[检查模式] 只报告计划，不修改任何东西' }
@@ -93,10 +93,10 @@ function Fix-Bundles([string]$profileDir) {
     if ($b -in @('dsh-startup-screen', 'dsh-chat-wallpaper')) { continue }
     $keep += $b
   }
-  if ($keep -notcontains 'dsh-boot-suite') {
+  if ($keep -notcontains 'dsh-dafeiyu-boot') {
     $idx = [array]::IndexOf($keep, 'dsh-plugin-desktop-notify')
-    if ($idx -gt 0) { $keep = @($keep[0..($idx-1)]) + 'dsh-boot-suite' + @($keep[$idx..($keep.Count-1)]) }
-    else { $keep += 'dsh-boot-suite' }
+    if ($idx -gt 0) { $keep = @($keep[0..($idx-1)]) + 'dsh-dafeiyu-boot' + @($keep[$idx..($keep.Count-1)]) }
+    else { $keep += 'dsh-dafeiyu-boot' }
   }
   $pkg.dsh.profile.bundles = $keep
   [System.IO.File]::WriteAllText($pj, ($pkg | ConvertTo-Json -Depth 20), (New-Object System.Text.UTF8Encoding($false)))
@@ -135,12 +135,12 @@ foreach ($profile in $targets) {
   Say '  [3/3] 修正 bundles 列表 …'
   Fix-Bundles $profileDir
 
-  $inst = Join-Path $profileDir 'node_modules\dsh-boot-suite'
+  $inst = Join-Path $profileDir 'node_modules\dsh-dafeiyu-boot'
   if (Test-Path $inst) {
     $ver = ([System.IO.File]::ReadAllText((Join-Path $inst 'package.json')) | ConvertFrom-Json).version
     Say ('  装好了：v' + $ver)
   } else {
-    Say '  [!] node_modules 里没看到 dsh-boot-suite，请检查上面的输出'
+    Say '  [!] node_modules 里没看到 dsh-dafeiyu-boot，请检查上面的输出'
   }
 }
 

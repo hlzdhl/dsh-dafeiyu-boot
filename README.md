@@ -138,7 +138,7 @@ DSH 冷启动时先播六幕动画，播完进聊天，再落在你自己设的�
 
 双击 **`卸载.cmd`**（开机黑屏、界面点不动时的急救也用它），或：
 
-    dsh plugin --profile desktop remove dsh-boot-suite
+    dsh plugin --profile desktop remove dsh-dafeiyu-boot
 
 配置文件不会自动删，要清干净手动删 `~/.dsh/dsh-startup.json` 和 `~/.dsh/chat-wallpaper.json`。
 

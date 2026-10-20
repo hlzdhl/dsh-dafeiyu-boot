@@ -26,7 +26,7 @@
 
 ## 卸载
 
-    dsh plugin --profile desktop remove dsh-boot-suite
+    dsh plugin --profile desktop remove dsh-dafeiyu-boot
 
 配置文件不会自动删除，要清干净手动删：
 

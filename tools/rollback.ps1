@@ -1,6 +1,6 @@
 ﻿#Requires -Version 5.1
 <#
-  dsh-boot-suite —— 回滚到某个备份
+  dsh-dafeiyu-boot —— 回滚到某个备份
 
   备份由 tools\make-backup.ps1 生成，放在仓库的 backups\known-good-<时间戳>\ 下。
 
@@ -66,7 +66,7 @@ Copy-Item $pj (Join-Path $keepDir 'package.json') -Force
 if (Test-Path (Join-Path $ProfileDir 'pnpm-lock.yaml')) { Copy-Item (Join-Path $ProfileDir 'pnpm-lock.yaml') (Join-Path $keepDir 'pnpm-lock.yaml') -Force }
 
 Say '[2/4] 卸载当前版本 …'
-& $pm.node $pm.pnpm remove --dir $ProfileDir dsh-boot-suite 2>&1 | ForEach-Object { '    ' + $_ }
+& $pm.node $pm.pnpm remove --dir $ProfileDir dsh-dafeiyu-boot 2>&1 | ForEach-Object { '    ' + $_ }
 
 Say '[3/4] 从备份安装 …'
 $spec = 'link:' + ($srcDir -replace '\\', '/')
@@ -82,9 +82,9 @@ Say '[4/4] 修正 bundles 列表 …'
 $pkg = [System.IO.File]::ReadAllText($pj) | ConvertFrom-Json
 $keep = @()
 foreach ($b in @($pkg.dsh.profile.bundles)) { if ($b -in @('dsh-startup-screen', 'dsh-chat-wallpaper')) { continue }; $keep += $b }
-if ($keep -notcontains 'dsh-boot-suite') {
+if ($keep -notcontains 'dsh-dafeiyu-boot') {
   $idx = [array]::IndexOf($keep, 'dsh-plugin-desktop-notify')
-  if ($idx -gt 0) { $keep = @($keep[0..($idx-1)]) + 'dsh-boot-suite' + @($keep[$idx..($keep.Count-1)]) } else { $keep += 'dsh-boot-suite' }
+  if ($idx -gt 0) { $keep = @($keep[0..($idx-1)]) + 'dsh-dafeiyu-boot' + @($keep[$idx..($keep.Count-1)]) } else { $keep += 'dsh-dafeiyu-boot' }
 }
 $pkg.dsh.profile.bundles = $keep
 [System.IO.File]::WriteAllText($pj, ($pkg | ConvertTo-Json -Depth 20), (New-Object System.Text.UTF8Encoding($false)))

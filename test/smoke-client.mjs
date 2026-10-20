@@ -108,7 +108,7 @@ sandbox.globalThis = sandbox
 vm.createContext(sandbox)
 vm.runInContext(code, sandbox, { filename: 'client.js' })
 check('调用了 ModuleLoader.load', loaded !== null)
-check('注册 id 等于 loader entry 名（否则会报 loaded without registering）', loaded && loaded.id === 'dsh-boot-suite', loaded && loaded.id)
+check('注册 id 等于 loader entry 名（否则会报 loaded without registering）', loaded && loaded.id === 'dsh-dafeiyu-boot', loaded && loaded.id)
 check('提供了 factory', loaded && typeof loaded.factory === 'function')
 
 console.log('\n[2] factory 导出形状')

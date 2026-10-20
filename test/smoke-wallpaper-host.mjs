@@ -4,4 +4,4 @@ const d = m.default
 console.log('  name   :', d.name)
 console.log('  inject :', JSON.stringify(d.inject))
 console.log('  apply  :', typeof d.apply)
-console.log(d.name === 'dsh-boot-suite' && Array.isArray(d.inject) && typeof d.apply === 'function' ? '  ✓ 契约正确' : '  ✗ 契约不对')
+console.log(d.name === 'dsh-dafeiyu-boot' && Array.isArray(d.inject) && typeof d.apply === 'function' ? '  ✓ 契约正确' : '  ✗ 契约不对')

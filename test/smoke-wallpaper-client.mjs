@@ -36,7 +36,7 @@ const ok = (cond, label, extra) => {
 
 console.log('=== ① ModuleLoader 契约 ===')
 ok(captured !== null, 'window.__ModuleLoader__.load 被调用')
-ok(captured && captured.id === 'dsh-boot-suite', '注册 id 与 loader entry 名一致', captured && captured.id)
+ok(captured && captured.id === 'dsh-dafeiyu-boot', '注册 id 与 loader entry 名一致', captured && captured.id)
 ok(captured && typeof captured.factory === 'function', 'factory 是函数')
 
 const mod = captured.factory((name) => { if (name === "react") return { createElement: () => ({ props: {} }), useState: (v) => [v, () => {}], useEffect: () => {}, useMemo: (f) => f(), useRef: (v) => ({ current: v }) }; throw new Error("unexpected require: " + name) })

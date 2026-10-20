@@ -3,7 +3,7 @@ setlocal
 chcp 65001 >nul 2>nul
 echo.
 echo ============================================================
-echo   dsh-boot-suite 卸载（界面出问题时的急救）
+echo   dsh-dafeiyu-boot 卸载（界面出问题时的急救）
 echo ============================================================
 echo   请先用任务管理器结束全部 DeepSeek Harness 进程
 echo.
