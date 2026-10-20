@@ -12,10 +12,11 @@
 [![license](https://img.shields.io/badge/license-MIT-blue)](LICENSE)
 [![upstream](https://img.shields.io/badge/upstream-LeeRolling%2Fdsh--boot--suite-lightgrey)](https://github.com/LeeRolling/dsh-boot-suite)
 
-![Full six-act boot animation](docs/demo.gif)
+![Full six-act boot animation, then the intro video](docs/demo.gif)
 
-<sub>**All six acts · ~12 s**: black logo → overexposed wash → five-step access grant → glitch reveal.
-Recorded in real time from [`preview/demo.html`](preview/demo.html); auto-play, no audio.</sub>
+<sub>**The whole sequence · ~16 s**: black logo → overexposed wash → five-step access grant → glitch reveal,
+then the **intro video** that plays after boot (the wallpaper half, `placement: front`).
+The first half is recorded in real time from [`preview/demo.html`](preview/demo.html), the second from `~/.dsh/boot-animation/videos/`; no audio.</sub>
 
 ## What this fork changes
 

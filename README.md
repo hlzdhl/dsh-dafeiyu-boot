@@ -13,10 +13,11 @@
 
 ![开机动画主画面](docs/hero.png)
 
-![完整六幕启动动画](docs/demo.gif)
+![完整六幕启动动画 + 开机后的开场视频](docs/demo.gif)
 
-<sub>**完整六幕 · 约 12 秒**：0:00 黑幕标识 → 0:03 过曝洗白 → 0:03–0:11 五步授权 → 0:12 色散故障揭幕。
-原速录制自 [`preview/demo.html`](preview/demo.html)，自动播放、无音轨。</sub>
+<sub>**完整过程 · 约 16 秒**：0:00 黑幕标识 → 0:03 过曝洗白 → 0:03–0:11 五步授权 → 0:12 色散故障揭幕
+→ 0:12 起是**开机之后的开场视频**（聊天壁纸半侧，`placement: front`）。
+前半段原速录制自 [`preview/demo.html`](preview/demo.html)，后半段取自 `~/.dsh/boot-animation/videos/`；无音轨。</sub>
 
 ---
 
