@@ -202,5 +202,17 @@ ok(skipBody.includes(SKIP_EVENT), "★ requestSkip 里 dispatch 了 '" + SKIP_EV
 ok(skipBody.indexOf('releaseAll()') > skipBody.indexOf(SKIP_EVENT),
   '★ 先广播、后收场（不然监听器可能在层已经拆完之后才收到事件）')
 
+console.log('\n=== J. 两幕的 SKIP 在同一个位置（不用第二幕再去找）===')
+const splashCss = fs.readFileSync(new URL('../lib/splash.css', import.meta.url), 'utf8')
+const dsuBlock = splashCss.slice(splashCss.indexOf('.dsu-skip {')).split('}')[0]
+const posMatch = dsuBlock.match(/right:\s*([^;]+);[\s\S]*?top:\s*([^;]+);/)
+ok(!!posMatch, '前置：从 splash.css 的 .dsu-skip 里读到了 right/top', posMatch ? posMatch[1].trim() + ' / ' + posMatch[2].trim() : '没读到')
+const cssFront = mod.__buildCss({ placement: 'front', opacity: 1 })
+const wantPos = 'right: ' + posMatch[1].trim() + '; top: ' + posMatch[2].trim() + ';'
+ok(cssFront.includes(wantPos), '★ 视频层 SKIP 与第一幕 SKIP 位置完全一致 → ' + wantPos,
+  cssFront.includes('right: 46px; top: 48px;') ? '' : '位置不一致')
+ok(/\.dsh-cw-skip \{[^}]*font-size: 11px/.test(cssFront),
+  '★ 字号也一致（11px）—— 两幕看着像同一颗按钮')
+
 console.log(`\n通过 ${fails === 0 ? '全部' : '部分'}，失败 ${fails}`)
 process.exit(fails === 0 ? 0 : 1)

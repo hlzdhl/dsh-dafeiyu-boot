@@ -60,7 +60,7 @@
 | `lib/splash.js:2372` | `requestSkip()` 写一次性标记 `dsh-startup-screen:skipped`，并 `dispatchEvent(new CustomEvent('dsh-startup:skip'))`（先广播、后收场） |
 | `lib/client.js` `skipIntroNow()` | 三个入口的唯一下沉点：开机动画的 SKIP / Esc、视频层自己的 SKIP 按钮、视频在放时按 Esc |
 | `lib/client.js` 起始闸门 | 读到标记或本次已按过跳过 → 不挂视频层；`teardown()`（= 一次新的页面加载）复位 |
-| `lib/client.js` 视频层 | 全屏开场右下角多一颗 `SKIP ▸`（`.dsh-cw-skip`）；根层仍然 `pointer-events:none`，只有这颗按钮 `auto`（不用整层吃点击） |
+| `lib/client.js` 视频层 | 全屏开场右上角多一颗 `SKIP ▸`（`.dsh-cw-skip`），位置/字号照抄第一幕的 `.dsu-skip`（`right:46px; top:48px; 11px`），两幕的 SKIP 在同一个点上；根层仍然 `pointer-events:none`，只有这颗按钮 `auto`（不用整层吃点击） |
 | `lib/client.js` `replayIntro()` | 面板「🔁 重播开场」清掉标记 —— 显式重播优先于跳过 |
 
 跳过是**硬切**（不等 1.2 秒淡出），自然播完仍然淡出。对应测试：`test/smoke-skip-intro.mjs`。
