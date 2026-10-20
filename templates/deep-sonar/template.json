@@ -1,0 +1,104 @@
+{
+  "schemaVersion": 1,
+  "id": "deep-sonar",
+  "name": "深海声呐",
+  "author": "DeepSeek",
+  "license": "MIT",
+  "version": "0.9.1",
+  "description": "深海声呐：深蓝 #1E48BA 底 + 浅蓝强调，五幕下潜叙事，自带六句英文播报（重档机械音色）。视觉语言基于沈宏宏的开机动画。",
+  "tags": [
+    "dark",
+    "sonar",
+    "terminal",
+    "deepsea"
+  ],
+  "theme": {
+    "mode": "dark",
+    "bg": "#1e48ba",
+    "bg2": "#2454c9",
+    "ink": "#f4f8ff",
+    "inkSoft": "#e6eefc",
+    "muted": "#c9dbf7",
+    "hair": "rgba(114,162,234,0.50)",
+    "hairSoft": "rgba(114,162,234,0.22)",
+    "accent": "#72a2ea",
+    "glitchA": "#ff7f96",
+    "glitchB": "#9cc4ff"
+  },
+  "steps": [
+    {
+      "zh": "建立下潜通道",
+      "en": "ESTABLISHING DESCENT CHANNEL",
+      "say": "Establishing descent channel.",
+      "audio": "line-1",
+      "log": "正在建立下潜通道…",
+      "logEn": "LINKING TO HOST VESSEL",
+      "badge": "DESCENT",
+      "action": "grant",
+      "btnZh": "授权下潜",
+      "btnEn": "AUTHORIZE DESCENT",
+      "hold": 900
+    },
+    {
+      "zh": "核验操作员",
+      "en": "VERIFYING OPERATOR",
+      "say": "Verifying operator.",
+      "audio": "line-2",
+      "log": "核对操作员记录…",
+      "logEn": "MATCHING OPERATOR RECORD",
+      "badge": "IDENTITY",
+      "action": "confirm",
+      "btnZh": "确认身份",
+      "btnEn": "CONFIRM IDENTITY",
+      "hold": 700
+    },
+    {
+      "zh": "声呐校准",
+      "en": "SONAR CALIBRATION",
+      "say": "Calibrating sonar array.",
+      "audio": "line-3",
+      "log": "校准换能器阵列…",
+      "logEn": "ALIGNING TRANSDUCER ARRAY",
+      "badge": "SONAR",
+      "action": "auto",
+      "hold": 1200,
+      "assembleLogo": true
+    },
+    {
+      "zh": "扫描海域",
+      "en": "SWEEPING SECTOR",
+      "say": "Sweeping sector.",
+      "audio": "line-4",
+      "log": "扫描当前海域…",
+      "logEn": "SWEEPING CURRENT SECTOR",
+      "badge": "SWEEP",
+      "action": "auto",
+      "hold": 1200,
+      "hex": true
+    },
+    {
+      "zh": "信号锁定",
+      "en": "SIGNAL LOCKED",
+      "say": "Signal locked.",
+      "audio": "line-5",
+      "log": "目标信号已锁定，通道开启",
+      "logEn": "TARGET LOCKED · CHANNEL OPEN",
+      "badge": "LOCK",
+      "action": "auto",
+      "hold": 1600,
+      "reticle": true
+    }
+  ],
+  "changelog": "0.9.1：换成用户选定的「重」档音色（带通 400–2600Hz + 70Hz 环调 20% + 饱和 + 反射）；底噪床改为上下文真正 running 后 0.3 秒淡入，全程不断（原来 2.5 秒淡入 + suspended 排队，听起来会突然冒出）。",
+  "adaptedBy": "LeeRolling",
+  "assets": {
+    "line-1": "assets/line-1.wav",
+    "line-2": "assets/line-2.wav",
+    "line-3": "assets/line-3.wav",
+    "line-4": "assets/line-4.wav",
+    "line-5": "assets/line-5.wav",
+    "line-6": "assets/line-6.wav"
+  },
+  "basedOn": "沈宏宏",
+  "homepage": "https://github.com/LeeRolling/dsh-boot-suite-templates"
+}

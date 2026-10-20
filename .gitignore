@@ -1,0 +1,15 @@
+node_modules/
+*.tgz
+*.bak
+*.bak.*
+.DS_Store
+Thumbs.db
+
+# 环境变量 / 本地配置
+.env
+.env.*
+*.log
+
+# 编辑器
+.vscode/
+.idea/
