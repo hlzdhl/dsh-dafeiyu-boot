@@ -13,7 +13,10 @@
 
 ![开机动画主画面](docs/hero.png)
 
-![启动过程演示](docs/demo.gif)
+![完整六幕启动动画](docs/demo.gif)
+
+<sub>**完整六幕 · 约 12 秒**：0:00 黑幕标识 → 0:03 过曝洗白 → 0:03–0:11 五步授权 → 0:12 色散故障揭幕。
+原速录制自 [`preview/demo.html`](preview/demo.html)，自动播放、无音轨。</sub>
 
 ---
 
