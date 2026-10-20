@@ -12,6 +12,11 @@
 [![license](https://img.shields.io/badge/license-MIT-blue)](LICENSE)
 [![upstream](https://img.shields.io/badge/upstream-LeeRolling%2Fdsh--boot--suite-lightgrey)](https://github.com/LeeRolling/dsh-boot-suite)
 
+![Full six-act boot animation](docs/demo.gif)
+
+<sub>**All six acts · ~12 s**: black logo → overexposed wash → five-step access grant → glitch reveal.
+Recorded in real time from [`preview/demo.html`](preview/demo.html); auto-play, no audio.</sub>
+
 ## What this fork changes
 
 Upstream exposes two settings pages — 「启动动画」 (`settings.section` id `startup-screen`, order 26)
