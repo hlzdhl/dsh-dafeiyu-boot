@@ -253,7 +253,14 @@ ok(cssFront.includes('background: #000'), 'front → 不透明底（不让聊天
 const frontBlock = cssFront.split('z-index: 2147482990')[1] || ''
 ok(frontBlock.includes('pointer-events: none'),
   '★ front 层 pointer-events:none —— 绝不吞点击（"点一下才播动画"那个 bug 的根因）')
-ok(!cssFront.includes('cursor: pointer'), 'front 层不再假装可点（"点击跳过"已删掉）')
+const frontRootRule = (cssFront.split('z-index: 2147482990')[1] || '').split('}')[0]
+ok(!frontRootRule.includes('cursor: pointer'),
+  '★ front 层本身仍然不可点（整层吃点击那个 bug 不能再回来）')
+/* 本地补丁：全屏开场多了一颗 SKIP 按钮。它是**唯一**可点的东西 ——
+   根规则照旧 pointer-events:none，只有 .dsh-cw-skip 自己开 auto。
+   所以这条断言从"完全没有可点样式"改成了"可点的只有这颗按钮"。 */
+ok(/\.dsh-cw-skip \{[^}]*pointer-events: auto/.test(cssFront),
+  '★ 只有 SKIP 按钮自己开 pointer-events:auto（点它才跳过，点别处不会误触）')
 ok(!cssFront.includes('--dsw-alias-bg-base: transparent'),
   '★ front + 没图 → 【不动外壳变量】—— 动了的话视频播完聊天界面会变透明')
 const cssBehind = mod.__buildCss({ ...cfg, placement: 'behind' })

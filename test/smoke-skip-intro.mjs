@@ -1,10 +1,11 @@
 import { fileURLToPath } from 'node:url'
-// 跳过联动测试：开机动画按 SKIP → 后面那段全屏开场视频也一起跳过。
+// 跳过联动测试：开机动画按 SKIP → 后面那段全屏开场视频也一起跳过；视频自己也能跳。
 //
-// 两条时序都要成立：
-//   · 视频还没挂上（闸门还没开）→ 读掉一次性标记，根本不播
-//   · 视频已经在放 → 收到 'dsh-startup:skip' 事件，立刻撤层
-// splash 那半边没有可注入的 DOM 环境，所以只做源码级断言（两个约定字符串必须在 requestSkip 里）。
+// 覆盖三条入口（都汇到 skipIntroNow）：
+//   · 开机动画的 SKIP 按钮 / Esc  → splash 写标记 + 广播 dsh-startup:skip
+//   · 视频层自己的 SKIP 按钮
+//   · 视频正在放时按 Esc
+// splash 那半边没有可注入的 DOM 环境，所以只做源码级断言。
 import fs from 'node:fs'
 import vm from 'node:vm'
 
@@ -27,7 +28,7 @@ function mkEl(tag) {
     _handlers: {},
     setAttribute() {}, removeAttribute() {}, load() {},
     addEventListener(t, fn) { (el._handlers[t] = el._handlers[t] || []).push(fn) },
-    fire(t) { (el._handlers[t] || []).forEach((fn) => fn({ type: t })) },
+    fire(t, ev) { (el._handlers[t] || []).forEach((fn) => fn(ev || { type: t })) },
     appendChild(c) { c.parentNode = el; el.children.push(c); return c },
     insertBefore(c) { c.parentNode = el; el.children.unshift(c); return c },
     removeChild(c) { const i = el.children.indexOf(c); if (i >= 0) el.children.splice(i, 1); return c },
@@ -45,8 +46,11 @@ function mkEl(tag) {
   return el
 }
 
-/* 极简事件总线：开机动画半侧 dispatch，视频半侧 listen */
+/* window 事件总线：开机动画半侧 dispatch，视频半侧 listen */
 const bus = {}
+/* document 事件总线：视频半侧在 capture 阶段监听 click / keydown */
+const docBus = {}
+
 const win = {
   __ModuleLoader__: { load(o) { captured = o } },
   sessionStorage: {
@@ -71,7 +75,8 @@ const sandbox = {
     createElement(t) { const e = mkEl(t); if (String(t) === 'video') sandbox.createdVideos.push(e); return e },
     getElementById(id) { return sandbox.document.body.children.find((c) => c.id === id) || null },
     querySelector(sel) { return sel === '#dsh-startup-root' ? sandbox.__overlay : null },
-    addEventListener() {},
+    addEventListener(type, fn) { (docBus[type] = docBus[type] || []).push(fn) },
+    removeEventListener(type, fn) { docBus[type] = (docBus[type] || []).filter((f) => f !== fn) },
   },
   setTimeout: () => 0, clearTimeout: () => {},
   setInterval(fn, ms) { timers.push({ fn, ms, cleared: false, id: timers.length + 1 }); return timers.length },
@@ -84,12 +89,14 @@ const sandbox = {
 }
 
 function tick(n = 1) { for (let i = 0; i < n; i++) for (const t of timers) if (!t.cleared) t.fn() }
+function fireDoc(type, ev) { (docBus[type] || []).slice().forEach((fn) => fn(ev)); return true }
 
 function reset() {
   timers.length = 0
   sandbox.createdVideos.length = 0
   sandbox.document.body.children.length = 0
   win.sessionStorage._m.clear()
+  /* teardown 代表"一次新的页面加载"：它会把 skipRequested 复位 */
   try { mod.__teardown() } catch (e) { /* 第一次调用时 mod 还没赋值 */ }
 }
 
@@ -148,6 +155,43 @@ mod.__startWhenFree({ placement: 'front', waitForBoot: false, __forceReplay: tru
 tick(1)
 ok(!!layerEl(), '★ __forceReplay 时即使有跳过标记也照播', layerEl() ? '' : '被吞掉了')
 ok(skipMarker() === null, '★ 顺手把标记吃掉，不影响之后')
+
+console.log('\n=== F. 视频层自带 SKIP 按钮 ===')
+reset()
+mod.__startWhenFree({ placement: 'front', waitForBoot: false })
+tick(1)
+const btn = layerEl() && layerEl().querySelector('.dsh-cw-skip')
+ok(!!btn, '★ 全屏开场里有一个 .dsh-cw-skip 按钮（"第二幕"自己也能跳）', btn ? '' : '没找到按钮')
+ok(btn && btn.textContent === 'SKIP ▸', '按钮文字是 SKIP ▸', btn ? btn.textContent : '-')
+btn.fire('click')
+ok(!layerEl(), '★ 点它 → 层立刻消失（硬切，不等淡出）', layerEl() ? '层还在' : '')
+
+console.log('\n=== G. 视频在放时按 Esc ===')
+reset()
+mod.__startWhenFree({ placement: 'front', waitForBoot: false })
+tick(1)
+ok(!!layerEl(), '前置：层已挂上')
+fireDoc('keydown', { key: 'Escape' })
+ok(!layerEl(), '★ Esc → 层立刻消失', layerEl() ? '层还在' : '')
+
+console.log('\n=== H. 开机动画还在放的时候按 Esc（层都还没挂）===')
+reset()
+fireDoc('keydown', { key: 'Escape' })
+mod.__startWhenFree({ placement: 'front', waitForBoot: false })
+tick(5)
+ok(!layerEl(), '★ 早按的 Esc 也算数 → 闸门不再挂层', layerEl() ? '竟然挂了' : '')
+reset()
+mod.__startWhenFree({ placement: 'front', waitForBoot: false })
+tick(1)
+ok(!!layerEl(), '★ 下一次页面加载不受影响（状态在 teardown 里复位）')
+
+console.log('\n=== I. 点开机动画那颗 .dsu-skip 也走同一条路 ===')
+reset()
+mod.__startWhenFree({ placement: 'front', waitForBoot: false })
+tick(1)
+ok(!!layerEl(), '前置：层已挂上')
+fireDoc('click', { target: { closest: (sel) => (sel === '.dsu-skip' ? {} : null) } })
+ok(!layerEl(), '★ 点 .dsu-skip（开机动画的 SKIP）→ 视频层被撤掉', layerEl() ? '层还在' : '')
 
 console.log('\n=== E. splash 半边确实写了这两个约定 ===')
 const splashSrc = fs.readFileSync(SPLASH, 'utf8')

@@ -49,7 +49,23 @@
 - `test/smoke-client.mjs`：`sections === 1`；新增"合并页有分隔线""能渲染出「当前状态」「背景图」「重播开场」"三条断言
 - `test/smoke-desktop-boot.mjs`：注册数 `2 → 1`，原"聊天背景设置节也注册了"改为"聊天背景不再单独注册设置节"
 
-除此之外**没有改动**上游任何逻辑、样式、音频和模板。
+除此之外，本 fork 还加了一处**行为**改动：
+
+### 跳过联动（一次 SKIP 贯穿两段）
+
+上游的 SKIP 只收掉六幕动画，紧接着壁纸半侧那段全屏开场视频照放 —— 按过 SKIP 的人还要再被挡一次。这里让"跳过"对两段都生效：
+
+| 位置 | 改动 |
+|---|---|
+| `lib/splash.js:2372` | `requestSkip()` 写一次性标记 `dsh-startup-screen:skipped`，并 `dispatchEvent(new CustomEvent('dsh-startup:skip'))`（先广播、后收场） |
+| `lib/client.js` `skipIntroNow()` | 三个入口的唯一下沉点：开机动画的 SKIP / Esc、视频层自己的 SKIP 按钮、视频在放时按 Esc |
+| `lib/client.js` 起始闸门 | 读到标记或本次已按过跳过 → 不挂视频层；`teardown()`（= 一次新的页面加载）复位 |
+| `lib/client.js` 视频层 | 全屏开场右下角多一颗 `SKIP ▸`（`.dsh-cw-skip`）；根层仍然 `pointer-events:none`，只有这颗按钮 `auto`（不用整层吃点击） |
+| `lib/client.js` `replayIntro()` | 面板「🔁 重播开场」清掉标记 —— 显式重播优先于跳过 |
+
+跳过是**硬切**（不等 1.2 秒淡出），自然播完仍然淡出。对应测试：`test/smoke-skip-intro.mjs`。
+
+除此之外没有改动上游的逻辑、样式、音频和模板。
 
 ---
 
