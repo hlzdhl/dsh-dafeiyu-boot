@@ -3,10 +3,17 @@
 > **DeepSeek Harness 开机套件** —— 六幕开机动画 + 聊天壁纸，一个插件两个半侧。
 >
 > 本仓库是 **[LeeRolling/dsh-boot-suite](https://github.com/LeeRolling/dsh-boot-suite) 的修改版（fork）**，
-> 原作者 **沈宏宏（LeeRolling）**，MIT 许可。相对上游只改了 3 处：把原本独立的
-> **「聊天背景」设置页并入「启动动画」页**，设置里只留一张页面。上游完整文档保留在
+> 原作者 **沈宏宏（LeeRolling）**，MIT 许可。上游完整文档保留在
 > [`README.upstream.md`](README.upstream.md)。
+>
+> 相对上游的改动（本仓库从 **1.1.0** 起独立编号，不再沿用上游的 2.x）：
+>
+> 1. **设置页合并** —— 原本独立的「聊天背景」页并入「启动动画」，设置里只留一张页面
+> 2. **跳过联动** —— 第一幕的 `SKIP ▸` / `Esc` 一次收掉两段（六幕动画 + 开机后的开场视频）
+> 3. **第二幕自带 SKIP** —— 开场视频全屏播放时也能跳过；位置、字号、淡入节奏与第一幕完全一致
+> 4. **检查更新指向本仓库** —— 不再比对上游的版本号
 
+[![version](https://img.shields.io/badge/version-1.1.0-orange)](CHANGELOG.md)
 [![license](https://img.shields.io/badge/license-MIT-blue)](LICENSE)
 [![upstream](https://img.shields.io/badge/upstream-LeeRolling%2Fdsh--boot--suite-lightgrey)](https://github.com/LeeRolling/dsh-boot-suite)
 [![platform](https://img.shields.io/badge/platform-Windows%20%7C%20Web-lightgrey)](#安装)
@@ -35,7 +42,7 @@
 
 ## 和上游的差别
 
-全部改动集中在 `lib/client.js` 一个文件里（该文件内是两个 IIFE：`__bootHalf` 开机动画、`__wallHalf` 壁纸）：
+设置页合并的改动集中在 `lib/client.js` 一个文件里（该文件内是两个 IIFE：`__bootHalf` 开机动画、`__wallHalf` 壁纸）：
 
 | # | 位置 | 改动 |
 |---|---|---|
@@ -49,7 +56,7 @@
 - `test/smoke-client.mjs`：`sections === 1`；新增"合并页有分隔线""能渲染出「当前状态」「背景图」「重播开场」"三条断言
 - `test/smoke-desktop-boot.mjs`：注册数 `2 → 1`，原"聊天背景设置节也注册了"改为"聊天背景不再单独注册设置节"
 
-除此之外，本 fork 还加了一处**行为**改动：
+除此之外，本 fork 还有三处**行为**改动（跨 `lib/splash.js` 与 `lib/client.js`）：
 
 ### 跳过联动（一次 SKIP 贯穿两段）
 
